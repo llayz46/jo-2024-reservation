@@ -1,7 +1,7 @@
 import { Button, buttonVariants } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { MapPin, Trophy, Users, Ticket } from "lucide-react"
+import { MapPin, Trophy, Users, Ticket, UserIcon } from 'lucide-react';
 import { Head, Link } from '@inertiajs/react';
 import AppLogoIcon from '@/components/app-logo-icon';
 import { cn } from '@/lib/utils';
@@ -59,10 +59,16 @@ export default function Welcome() {
                                 Offres
                             </a>
                         </nav>
-                        <Button>
-                            <Ticket className="size-4" />
-                            Billets
-                        </Button>
+                        <div className="flex items-center gap-2">
+                            <Button>
+                                <Ticket className="size-4" />
+                                Billets
+                            </Button>
+
+                            <Link href={route('dashboard')} className={buttonVariants({ variant: 'secondary', size: 'icon' })}>
+                                <UserIcon size={20} />
+                            </Link>
+                        </div>
                     </div>
                 </header>
 
@@ -138,7 +144,7 @@ export default function Welcome() {
                                         <CardDescription className="text-muted-foreground">{offer.description}</CardDescription>
                                     </CardHeader>
                                     <CardContent className="space-y-4">
-                                        <div className="text-3xl font-bold">À partir de {offer.price}€</div>
+                                        <div className="text-3xl font-bold">{offer.price}</div>
                                         <ul className="space-y-2 text-sm">
                                             {offer.features.map((feature, idx) => (
                                                 <li key={idx}>• {feature}</li>

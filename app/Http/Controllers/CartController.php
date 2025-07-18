@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 use App\Factories\CartFactory;
 use App\Http\Resources\CartResource;
 use App\Models\Cart;
+use App\Models\Order;
 use App\Models\Ticket;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class CartController extends Controller
 {
@@ -127,5 +129,59 @@ class CartController extends Controller
         }
 
         return redirect()->back();
+    }
+
+    public function checkout(Request $request)
+    {
+        $cart = $request->user()?->cart ?: CartFactory::make();
+
+        $order = auth()->user()->orders()->create([
+            'amount_total' => $cart->items->sum(function ($item) {
+                return $item->ticket->price * $item->quantity;
+            }),
+        ]);
+
+        foreach ($cart->items as $item) {
+            $order->items()->create([
+                'ticket_id' => $item->ticket_id,
+                'title' => $item->ticket->title,
+                'description' => $item->ticket->description,
+                'quantity' => $item->quantity,
+                'price' => $item->ticket->price,
+                'amount_total' => $item->ticket->price * $item->quantity,
+            ]);
+        }
+
+        if ($cart) {
+            $cart->items()->delete();
+            $cart->delete();
+        }
+
+        return redirect(route('cart.success', [
+            'order' => $order->id,
+        ]));
+    }
+
+    /**
+     * Handle successful checkout.
+     *
+     * @param Request $request
+     * @return \Inertia\Response|\Illuminate\Http\RedirectResponse
+     */
+    public function success(Request $request)
+    {
+        $orderId = $request->get('order');
+
+        if (!$orderId) {
+            return redirect()->route('home')->withErrors(['order' => 'L\'id de l\'order est introuvable.']);
+        }
+
+        if(auth()->user()->orders()->where('id', $orderId)->doesntExist()) {
+            return redirect()->route('home')->withErrors(['order' => 'L\'order n\'existe pas ou vous n\'êtes pas autorisé à le voir.']);
+        }
+
+        return Inertia::render('checkout/success', [
+            'order' => auth()->user()->orders()->where('id', $orderId)->with('items')->firstOrFail(),
+        ]);
     }
 }

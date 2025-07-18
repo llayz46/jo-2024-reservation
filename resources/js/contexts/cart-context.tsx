@@ -7,8 +7,8 @@ type CartContextType = {
     loading: boolean;
     addToCart: (ticket: Ticket, quantity?: number) => void;
     removeItemOfCart: (ticketId: number) => void;
-    // clearCart: () => void;
     handleQuantity : (type: "inc" | "dec", ticketId: number) => void;
+    checkout: () => void;
 };
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
@@ -24,8 +24,8 @@ export function CartProvider({ children, initialCart }: CartProviderProps) {
         loading,
         addToCart,
         removeItemOfCart,
-        // clearCart,
         handleQuantity,
+        checkout
     } = useCart({ initialCart });
 
     return (
@@ -34,8 +34,8 @@ export function CartProvider({ children, initialCart }: CartProviderProps) {
             loading,
             addToCart,
             removeItemOfCart,
-            // clearCart,
-            handleQuantity
+            handleQuantity,
+            checkout
         }}>
             {children}
         </CartContext.Provider>

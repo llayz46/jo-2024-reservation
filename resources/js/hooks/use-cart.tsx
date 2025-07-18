@@ -99,29 +99,6 @@ export function useCart({ initialCart }: { initialCart?: Cart | null } = {}) {
         )
     };
 
-    // const clearCart = () => {
-    //     if (!optimisticCart) return;
-    //
-    //     const cart = optimisticCart;
-    //
-    //     setOptimisticCart({ ...cart, items: [], total: 0 });
-    //
-    //     router.post(
-    //         route('cart.clear', optimisticCart.id),
-    //         {},
-    //         {
-    //             preserveScroll: true,
-    //             onSuccess: (page) => {
-    //                 const cart = (page as Page<{ cart: Cart }>).props.cart;
-    //                 setOptimisticCart(cart);
-    //             },
-    //             onError: () => {
-    //                 setOptimisticCart(cart);
-    //             },
-    //         }
-    //     );
-    // };
-
     const handleQuantity = (type: "inc" | "dec", ticketId: number) => {
         if (!optimisticCart) return;
 
@@ -190,12 +167,20 @@ export function useCart({ initialCart }: { initialCart?: Cart | null } = {}) {
         }
     }
 
+    const checkout = () => {
+        router.post(
+            route('cart.checkout'),
+            {},
+            { preserveScroll: true }
+        )
+    }
+
     return {
         optimisticCart,
         loading,
         addToCart,
         removeItemOfCart,
-        // clearCart,
-        handleQuantity
+        handleQuantity,
+        checkout
     };
 }

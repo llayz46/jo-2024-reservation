@@ -10,14 +10,15 @@ Route::get('/', WelcomeController::class)->name('home');
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('dashboard', DashboardController::class)->name('dashboard');
+    Route::get('success', [CartController::class, 'success'])->name('cart.success');
 });
 
 Route::prefix('cart')->group(function () {
     Route::get('/', [CartController::class, 'index'])->name('cart.index');
     Route::post('/add', [CartController::class, 'addItem'])->name('cart.add');
     Route::post('/remove', [CartController::class, 'removeItem'])->name('cart.remove');
-    Route::post('/clear/{cart}', [CartController::class, 'clear'])->name('cart.clear');
     Route::put('/update', [CartController::class, 'handleItemQuantity'])->name('cart.update');
+    Route::post('/checkout', [CartController::class, 'checkout'])->name('cart.checkout');
 });
 
 Route::get('/tickets/{ticket:slug}', [TicketController::class, 'show'])->name('tickets.show');

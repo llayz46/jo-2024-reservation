@@ -13,7 +13,7 @@ import { useCartContext } from '@/contexts/cart-context';
 import { CartItem } from '@/components/cart-item';
 
 export function CartSheet() {
-    const { optimisticCart, removeItemOfCart, handleQuantity } = useCartContext();
+    const { optimisticCart, removeItemOfCart, handleQuantity, checkout } = useCartContext();
 
     return (
         <Sheet>
@@ -49,7 +49,7 @@ export function CartSheet() {
                 </div>
 
                 <SheetFooter className="flex-row-reverse justify-between">
-                    <Button type="submit">Passer à la caisse</Button>
+                    <Button type="submit" onClick={checkout}>Passer à la caisse</Button>
 
                     <SheetClose asChild>
                         <Button variant="outline">Fermer</Button>

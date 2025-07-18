@@ -70,3 +70,25 @@ export interface Cart {
     items: CartItem[];
     total: number;
 }
+
+export interface Order {
+    order_number: number;
+    amount_total: number;
+    user_id: number;
+    user?: User;
+    items: OrderItem[];
+}
+
+export interface OrderItem {
+    id: number;
+    order_id: number;
+    ticket_id: number;
+    title: string;
+    description: string;
+    price: number;
+    quantity: number;
+    amount_total: number;
+    created_at: string;
+    updated_at: string;
+    ticket?: Ticket;
+}

@@ -5,9 +5,15 @@ namespace App\Http\Controllers;
 use App\Factories\CartFactory;
 use App\Http\Resources\CartResource;
 use App\Models\Cart;
-use App\Models\Order;
 use App\Models\Ticket;
+use Endroid\QrCode\Color\Color;
+use Endroid\QrCode\Encoding\Encoding;
+use Endroid\QrCode\ErrorCorrectionLevel;
+use Endroid\QrCode\QrCode;
+use Endroid\QrCode\RoundBlockSizeMode;
+use Endroid\QrCode\Writer\PngWriter;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Inertia\Inertia;
 
 class CartController extends Controller
@@ -83,7 +89,6 @@ class CartController extends Controller
      * Clear the cart.
      *
      * @param Cart $cart
-     * @param HandleProductCart $handleProductCart
      * @return \Illuminate\Http\RedirectResponse
      */
     public function clear(Request $request)
@@ -135,21 +140,27 @@ class CartController extends Controller
     {
         $cart = $request->user()?->cart ?: CartFactory::make();
 
-        $order = auth()->user()->orders()->create([
+        $user = auth()->user();
+
+        $order = $user->orders()->create([
             'amount_total' => $cart->items->sum(function ($item) {
                 return $item->ticket->price * $item->quantity;
-            }),
+            })
         ]);
 
         foreach ($cart->items as $item) {
-            $order->items()->create([
-                'ticket_id' => $item->ticket_id,
-                'title' => $item->ticket->title,
-                'description' => $item->ticket->description,
-                'quantity' => $item->quantity,
-                'price' => $item->ticket->price,
-                'amount_total' => $item->ticket->price * $item->quantity,
-            ]);
+            for ($i = 0; $i < $item->quantity; $i++) {
+                $ticket_key = Str::uuid();
+
+                $order->items()->create([
+                    'ticket_id'    => $item->ticket_id,
+                    'title'        => $item->ticket->title,
+                    'description'  => $item->ticket->description,
+                    'price'        => $item->ticket->price,
+                    'ticket_key'   => $ticket_key,
+                    'qr_signature' => hash('sha256', $user->private_key . $ticket_key),
+                ]);
+            }
         }
 
         if ($cart) {

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Str;
 
@@ -14,7 +15,7 @@ class Order extends Model
     protected $fillable = [
         'order_number',
         'amount_total',
-        'user_id',
+        'user_id'
     ];
 
     public function items(): HasMany
@@ -25,6 +26,11 @@ class Order extends Model
     public function total(): float
     {
         return $this->items->sum('amount_total');
+    }
+
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
     }
 
     protected static function booted()

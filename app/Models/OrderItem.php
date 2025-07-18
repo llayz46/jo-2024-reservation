@@ -16,8 +16,8 @@ class OrderItem extends Model
         'title',
         'description',
         'price',
-        'quantity',
-        'amount_total',
+        'ticket_key',
+        'qr_signature',
     ];
 
     public function order(): BelongsTo

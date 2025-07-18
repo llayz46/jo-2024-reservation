@@ -8,6 +8,8 @@ class DashboardController extends Controller
 {
     public function __invoke()
     {
-        return Inertia::render('dashboard');
+        return Inertia::render('dashboard', [
+            'orders' => fn () => auth()->user()?->orders()->with(['items.ticket:id,slug'])->get(),
+        ]);
     }
 }

@@ -9,6 +9,16 @@ import { Separator } from "@/components/ui/separator"
 export default function Success({ order }: { order: Order }) {
     const { auth } = usePage<SharedData>().props;
 
+    const groupedItems = Object.values(
+        order.items.reduce((acc, item) => {
+            if (!acc[item.ticket_id]) {
+                acc[item.ticket_id] = { ...item, quantity: 0 };
+            }
+            acc[item.ticket_id].quantity += 1;
+            return acc;
+        }, {} as Record<number, Order['items'][number]>)
+    );
+
     return (
         <div className="min-h-screen bg-background">
             <Head title={`Confirmation de commande ${order.order_number}`} />
@@ -53,7 +63,7 @@ export default function Success({ order }: { order: Order }) {
                                 <Separator />
 
                                 <div className="space-y-3">
-                                    {order.items.map((item, index) => (
+                                    {groupedItems.map((item, index) => (
                                         <div key={index} className="flex justify-between items-center">
                                             <div>
                                                 <p className="font-medium text-foreground">{item.title}</p>

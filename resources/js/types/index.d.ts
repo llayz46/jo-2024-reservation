@@ -36,6 +36,7 @@ export interface User {
     name: string;
     email: string;
     avatar?: string;
+    private_key: string;
     email_verified_at: string | null;
     created_at: string;
     updated_at: string;
@@ -72,11 +73,14 @@ export interface Cart {
 }
 
 export interface Order {
+    id: number;
     order_number: number;
     amount_total: number;
     user_id: number;
     user?: User;
     items: OrderItem[];
+    created_at: string;
+    updated_at: string;
 }
 
 export interface OrderItem {
@@ -88,7 +92,24 @@ export interface OrderItem {
     price: number;
     quantity: number;
     amount_total: number;
+    ticket_key: string;
+    qr_signature: string;
     created_at: string;
     updated_at: string;
     ticket?: Ticket;
+}
+
+export interface ScanResult {
+    status: "valid" | "invalid" | "expired" | "used"
+    user: {
+        name: string
+        email: string
+    }
+    ticket: {
+        offer: string
+        description: string
+        price: number
+        ticket_key: string
+    }
+    scanned_at: string
 }

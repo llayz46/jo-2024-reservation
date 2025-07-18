@@ -50,3 +50,23 @@ export interface Ticket {
     price: number;
     features: string[];
 }
+
+export interface CartItem {
+    id: number;
+    cart_id: number;
+    ticket_id: number;
+    quantity: number;
+    created_at: string;
+    updated_at: string;
+    ticket: Ticket;
+}
+
+export interface Cart {
+    id: number;
+    user_id?: User | null;
+    session_id?: string | null;
+    created_at: string;
+    updated_at: string;
+    items: CartItem[];
+    total: number;
+}

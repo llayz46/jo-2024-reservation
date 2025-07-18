@@ -1,7 +1,8 @@
 import { Link } from '@inertiajs/react';
 import AppLogoIcon from '@/components/app-logo-icon';
-import { Button, buttonVariants } from '@/components/ui/button';
-import { Ticket, UserIcon } from 'lucide-react';
+import { buttonVariants } from '@/components/ui/button';
+import { UserIcon } from 'lucide-react';
+import { CartSheet } from '@/components/cart-sheet';
 
 export default function BaseLayout({ children }: { children: React.ReactNode }) {
     return (
@@ -23,10 +24,7 @@ export default function BaseLayout({ children }: { children: React.ReactNode }) 
                         </Link>
                     </nav>
                     <div className="flex items-center gap-2">
-                        <Button>
-                            <Ticket className="size-4" />
-                            Billets
-                        </Button>
+                        <CartSheet />
 
                         <Link href={route('dashboard')} className={buttonVariants({ variant: 'secondary', size: 'icon' })}>
                             <UserIcon size={20} />

@@ -2,6 +2,9 @@
 
 namespace App\Http\Requests\Auth;
 
+use App\Actions\Cart\MigrateSessionCart;
+use App\Factories\CartFactory;
+use App\Models\User;
 use Illuminate\Auth\Events\Lockout;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
@@ -40,6 +43,15 @@ class LoginRequest extends FormRequest
     public function authenticate(): void
     {
         $this->ensureIsNotRateLimited();
+
+        $user = User::where('email', $this->input('email'))->first();
+
+        if ($user && \Hash::check($this->input('password'), $user->password)) {
+            (new MigrateSessionCart)->migrate(
+                CartFactory::make(),
+                $user->cart ?: $user->cart()->create()
+            );
+        }
 
         if (! Auth::attempt($this->only('email', 'password'), $this->boolean('remember'))) {
             RateLimiter::hit($this->throttleKey());

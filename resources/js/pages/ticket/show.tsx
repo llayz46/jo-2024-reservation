@@ -9,9 +9,13 @@ import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
 import { ShoppingCart, Check } from 'lucide-react';
 import { Link } from '@inertiajs/react';
+import { useCartContext } from '@/contexts/cart-context';
+import { useState } from 'react';
 
 export default function Show({ ticket, tickets }: { ticket: Ticket, tickets: Ticket[] }) {
-    console.log('tickets', tickets);
+    const { addToCart } = useCartContext();
+    const [quantity, setQuantity] = useState<number>(1);
+
     return (
         <BaseLayout>
             <Head title={ticket.title} />
@@ -77,7 +81,7 @@ export default function Show({ ticket, tickets }: { ticket: Ticket, tickets: Tic
                                                     <Link href={route('tickets.show', ticket.slug)} className={buttonVariants({ variant: 'outline', size: 'sm' })}>
                                                         Voir
                                                     </Link>
-                                                    <Button size="sm">
+                                                    <Button size="sm" onClick={() => addToCart(ticket)}>
                                                         <ShoppingCart className="w-3 h-3" />
                                                         Ajouter
                                                     </Button>
@@ -106,11 +110,21 @@ export default function Show({ ticket, tickets }: { ticket: Ticket, tickets: Tic
                                 <div className="space-y-3">
                                     <Label>Quantité</Label>
                                     <div className="flex items-center space-x-2">
-                                        <Button variant="outline" size="sm">
+                                        <Button
+                                            variant="outline"
+                                            size="sm"
+                                            onClick={() => setQuantity(prev => Math.max(prev - 1, 1))}
+                                            disabled={quantity <= 1}
+                                        >
                                             -
                                         </Button>
-                                        <Input type="number" value="1" className="text-center" min="1" max="8" />
-                                        <Button variant="outline" size="sm">
+                                        <Input type="number" value={quantity} className="text-center" min="1" max="8" />
+                                        <Button
+                                            variant="outline"
+                                            size="sm"
+                                            onClick={() => setQuantity(prev => Math.min(prev + 1, 8))}
+                                            disabled={quantity >= 8}
+                                        >
                                             +
                                         </Button>
                                     </div>
@@ -124,7 +138,7 @@ export default function Show({ ticket, tickets }: { ticket: Ticket, tickets: Tic
                                     <span>{ticket.price}€</span>
                                 </div>
 
-                                <Button className="w-full" size="lg">
+                                <Button className="w-full" size="lg" onClick={() => addToCart(ticket, quantity)}>
                                     <ShoppingCart className="w-4 h-4 mr-2" />
                                     Ajouter au panier
                                 </Button>

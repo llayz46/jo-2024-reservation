@@ -4,6 +4,8 @@ import { createInertiaApp } from '@inertiajs/react';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import { createRoot } from 'react-dom/client';
 import { initializeTheme } from './hooks/use-appearance';
+import { CartProvider } from '@/contexts/cart-context';
+import { Cart } from '@/types';
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
@@ -13,12 +15,17 @@ createInertiaApp({
     setup({ el, App, props }) {
         const root = createRoot(el);
 
-        root.render(<App {...props} />);
+        const cart = (props.initialPage.props as unknown as { cart: Cart | null }).cart;
+
+        root.render(
+            <CartProvider initialCart={cart}>
+                <App {...props} />
+            </CartProvider>
+        );
     },
     progress: {
         color: '#4B5563',
     },
 });
 
-// This will set light / dark mode on load...
 initializeTheme();

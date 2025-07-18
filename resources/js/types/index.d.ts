@@ -41,3 +41,12 @@ export interface User {
     updated_at: string;
     [key: string]: unknown; // This allows for additional properties...
 }
+
+export interface Ticket {
+    id: number;
+    title: string;
+    slug: string;
+    description: string;
+    price: number;
+    features: string[];
+}

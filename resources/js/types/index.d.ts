@@ -49,6 +49,7 @@ export interface Ticket {
     slug: string;
     description: string;
     price: number;
+    popular: boolean;
     features: string[];
 }
 

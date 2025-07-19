@@ -1,77 +1,18 @@
-import { Button, buttonVariants } from '@/components/ui/button';
+import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { MapPin, Trophy, Users, Ticket, UserIcon } from 'lucide-react';
+import { MapPin, Trophy, Users, Ticket } from 'lucide-react';
 import { Head, Link } from '@inertiajs/react';
-import AppLogoIcon from '@/components/app-logo-icon';
 import { cn } from '@/lib/utils';
+import BaseLayout from '@/layouts/base-layout';
+import type { Ticket as TicketType } from '@/types';
 
-const OFFERS = [
-    {
-        title: "Offre Solo",
-        description: "Parfait pour vivre l’événement en solo, à son rythme.",
-        price: "À partir de 45€",
-        features: [
-            "Accès à 3-5 épreuves",
-            "Emplacement standard en tribune",
-            "Transport inclus",
-            "Guide officiel"
-        ]
-    },
-    {
-        title: "Offre Duo",
-        description: "L’expérience olympique à deux, idéale pour partager un moment fort.",
-        price: "À partir de 69€",
-        features: [
-            "Accès pour 2 personnes à la même épreuve",
-            "Placement côte à côte garanti",
-            "Restauration incluse",
-            "Accès à une épreuve supplémentaire",
-        ],
-        popular: true
-    },
-    {
-        title: "Offre Familiale",
-        description: "Parfait pour toute la famille, jusqu’à 4 personnes incluses.",
-        price: "À partir de 129€",
-        features: [
-            "Accès pour 4 personnes à la même épreuve",
-            "Activités enfants",
-            "Zone famille dédiée",
-            "Réductions boutique"
-        ]
-    }
-]
-
-export default function Welcome() {
+export default function Welcome({ tickets }: { tickets: TicketType[] }) {
     return (
-        <>
+        <BaseLayout>
             <Head title="Accueil" />
 
             <div className="min-h-screen bg-background">
-                <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-                    <div className="container mx-auto flex h-16 items-center justify-between">
-                        <Link href="/">
-                            <AppLogoIcon className="size-8" />
-                        </Link>
-                        <nav className="hidden md:flex items-center">
-                            <a href="#tickets" className={buttonVariants({ variant: 'link' })}>
-                                Offres
-                            </a>
-                        </nav>
-                        <div className="flex items-center gap-2">
-                            <Button>
-                                <Ticket className="size-4" />
-                                Billets
-                            </Button>
-
-                            <Link href={route('dashboard')} className={buttonVariants({ variant: 'secondary', size: 'icon' })}>
-                                <UserIcon size={20} />
-                            </Link>
-                        </div>
-                    </div>
-                </header>
-
                 <section className="relative py-20 md:py-32 overflow-hidden bg-background">
                     <div className="container mx-auto relative">
                         <div className="grid lg:grid-cols-2 gap-8 items-center">
@@ -130,23 +71,23 @@ export default function Welcome() {
                             </p>
                         </div>
                         <div className="grid md:grid-cols-3 gap-6">
-                            {OFFERS.map((offer, index) => (
-                                <Card key={index} className={cn("bg-card text-card-foreground shadow-sm", offer.popular && "border border-yellow-400")}>
+                            {tickets.map((ticket) => (
+                                <Card key={ticket.id} className={cn("bg-card text-card-foreground shadow-sm", ticket.popular && "border border-yellow-400")}>
                                     <CardHeader>
-                                        {offer.popular ? (
+                                        {ticket.popular ? (
                                             <div className="flex items-center justify-between">
-                                                <CardTitle className="text-2xl">{offer.title}</CardTitle>
+                                                <CardTitle className="text-2xl">{ticket.title}</CardTitle>
                                                 <Badge className="bg-yellow-500 text-black">Populaire</Badge>
                                             </div>
                                         ) : (
-                                            <CardTitle className="text-2xl">{offer.title}</CardTitle>
+                                            <CardTitle className="text-2xl">{ticket.title}</CardTitle>
                                         )}
-                                        <CardDescription className="text-muted-foreground">{offer.description}</CardDescription>
+                                        <CardDescription className="text-muted-foreground">{ticket.description}</CardDescription>
                                     </CardHeader>
                                     <CardContent className="space-y-4">
-                                        <div className="text-3xl font-bold">{offer.price}</div>
+                                        <div className="text-3xl font-bold">À partir de {ticket.price}€</div>
                                         <ul className="space-y-2 text-sm">
-                                            {offer.features.map((feature, idx) => (
+                                            {ticket.features.map((feature, idx) => (
                                                 <li key={idx}>• {feature}</li>
                                             ))}
                                         </ul>
@@ -174,17 +115,17 @@ export default function Welcome() {
                                 <h3 className="font-semibold mb-4">Navigation</h3>
                                 <ul className="space-y-2 text-muted-foreground">
                                     <li>
-                                        <Link href="#" className="hover:text-white transition-colors">
+                                        <Link href="#" className="hover:text-foreground transition-colors">
                                             Actualités
                                         </Link>
                                     </li>
                                     <li>
-                                        <Link href="#" className="hover:text-white transition-colors">
+                                        <Link href="#" className="hover:text-foreground transition-colors">
                                             Sports
                                         </Link>
                                     </li>
                                     <li>
-                                        <Link href="#" className="hover:text-white transition-colors">
+                                        <Link href="#" className="hover:text-foreground transition-colors">
                                             Programme
                                         </Link>
                                     </li>
@@ -194,22 +135,22 @@ export default function Welcome() {
                                 <h3 className="font-semibold mb-4">Billetterie</h3>
                                 <ul className="space-y-2 text-muted-foreground">
                                     <li>
-                                        <Link href="#" className="hover:text-white transition-colors">
+                                        <Link href="#" className="hover:text-foreground transition-colors">
                                             Acheter des billets
                                         </Link>
                                     </li>
                                     <li>
-                                        <Link href="#" className="hover:text-white transition-colors">
+                                        <Link href="#" className="hover:text-foreground transition-colors">
                                             Offres spéciales
                                         </Link>
                                     </li>
                                     <li>
-                                        <Link href="#" className="hover:text-white transition-colors">
+                                        <Link href="#" className="hover:text-foreground transition-colors">
                                             Pass famille
                                         </Link>
                                     </li>
                                     <li>
-                                        <Link href="#" className="hover:text-white transition-colors">
+                                        <Link href="#" className="hover:text-foreground transition-colors">
                                             Accessibilité
                                         </Link>
                                     </li>
@@ -219,22 +160,22 @@ export default function Welcome() {
                                 <h3 className="font-semibold mb-4">Contact</h3>
                                 <ul className="space-y-2 text-muted-foreground">
                                     <li>
-                                        <Link href="#" className="hover:text-white transition-colors">
+                                        <Link href="#" className="hover:text-foreground transition-colors">
                                             Support
                                         </Link>
                                     </li>
                                     <li>
-                                        <Link href="#" className="hover:text-white transition-colors">
+                                        <Link href="#" className="hover:text-foreground transition-colors">
                                             Presse
                                         </Link>
                                     </li>
                                     <li>
-                                        <Link href="#" className="hover:text-white transition-colors">
+                                        <Link href="#" className="hover:text-foreground transition-colors">
                                             Partenaires
                                         </Link>
                                     </li>
                                     <li>
-                                        <Link href="#" className="hover:text-white transition-colors">
+                                        <Link href="#" className="hover:text-foreground transition-colors">
                                             Mentions légales
                                         </Link>
                                     </li>
@@ -247,6 +188,6 @@ export default function Welcome() {
                     </div>
                 </footer>
             </div>
-        </>
+        </BaseLayout>
     )
 }

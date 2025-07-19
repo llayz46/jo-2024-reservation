@@ -14,6 +14,7 @@ class Ticket extends Model
         'slug',
         'description',
         'price',
+        'popular',
         'features',
     ];
 
@@ -21,6 +22,7 @@ class Ticket extends Model
     {
         return [
             'features' => 'array',
+            'popular' => 'boolean',
         ];
     }
 }

@@ -17,6 +17,7 @@ class TicketFactory extends Factory
             'slug' => $this->faker->unique()->slug(),
             'description' => $this->faker->text(),
             'price' => $this->faker->randomFloat(2, 5, 500),
+            'popular' => $this->faker->boolean(),
             'features' => [
                 $this->faker->word(),
                 $this->faker->word(),

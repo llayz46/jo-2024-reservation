@@ -13,6 +13,7 @@ return new class extends Migration {
             $table->string('slug')->unique();
             $table->string('description');
             $table->integer('price');
+            $table->boolean('popular')->default(false);
             $table->json('features');
             $table->timestamps();
         });

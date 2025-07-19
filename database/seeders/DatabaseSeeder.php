@@ -26,6 +26,7 @@ class DatabaseSeeder extends Seeder
             'slug' => 'solo',
             'description' => 'Parfait pour vivre l’événement en solo, à son rythme.',
             'price' => 45,
+            'popular' => false,
             'features' => [
                 'Accès à 3-5 épreuves',
                 'Emplacement standard en tribune',
@@ -39,6 +40,7 @@ class DatabaseSeeder extends Seeder
             'slug' => 'duo',
             'description' => 'L’expérience olympique à deux, idéale pour partager un moment fort.',
             'price' => 69,
+            'popular' => true,
             'features' => [
                 'Accès pour 2 personnes à la même épreuve',
                 'Placement côte à côte garanti',
@@ -52,6 +54,7 @@ class DatabaseSeeder extends Seeder
             'slug' => 'familiale',
             'description' => 'Parfait pour toute la famille, jusqu’à 4 personnes incluses.',
             'price' => 129,
+            'popular' => false,
             'features' => [
                 'Accès pour 4 personnes à la même épreuve',
                 'Activités enfants',

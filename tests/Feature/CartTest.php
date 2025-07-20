@@ -4,8 +4,28 @@ use App\Factories\CartFactory;
 use App\Models\Cart;
 use App\Models\Ticket;
 use App\Models\User;
+use Inertia\Testing\AssertableInertia as Assert;
 
 uses(\Illuminate\Foundation\Testing\RefreshDatabase::class);
+
+test('users can view their cart', function () {
+    $user = User::factory()->create();
+    $ticket = Ticket::factory()->create();
+
+    $cart = $user->cart()->create();
+    $cart->items()->create([
+        'ticket_id' => $ticket->id,
+        'quantity' => 2,
+    ]);
+
+    $this->actingAs($user)
+        ->get('/')
+            ->assertInertia(fn (Assert $page) => $page
+                ->component('welcome')
+                ->has('cart.items', 1)
+                ->where('cart.items.0.ticket.id', $ticket->id)
+            );
+});
 
 test('users can add tickets to cart', function () {
     $user = User::factory()->create();
@@ -134,4 +154,26 @@ test('guest cart items is migrated to user cart on login', function () {
         'cart_id' => $sessionCart->id,
         'ticket_id' => $ticket2->id,
     ]);
+});
+
+test('users can checkout cart', function () {
+    $user = User::factory()->create();
+    $this->actingAs($user);
+
+    $cart = $user->cart()->create();
+    $ticket = Ticket::factory()->create();
+
+    $cart->items()->create([
+        'ticket_id' => $ticket->id,
+        'quantity' => 2,
+    ]);
+
+    $this->post(route('cart.checkout'));
+
+    $this->assertDatabaseHas('orders', [
+        'user_id' => $user->id,
+    ]);
+
+    $order = $user->orders()->first();
+    $this->assertEquals($ticket->id, $order->items[0]->ticket_id);
 });

@@ -29,7 +29,7 @@ Route::prefix('cart')->group(function () {
     Route::post('/add', [CartController::class, 'addItem'])->name('cart.add');
     Route::post('/remove', [CartController::class, 'removeItem'])->name('cart.remove');
     Route::put('/update', [CartController::class, 'handleItemQuantity'])->name('cart.update');
-    Route::post('/checkout', [CartController::class, 'checkout'])->name('cart.checkout');
+    Route::post('/checkout', [CartController::class, 'checkout'])->name('cart.checkout')->middleware('auth');
 });
 
 Route::get('/tickets/{ticket:slug}', [TicketController::class, 'show'])->name('tickets.show');

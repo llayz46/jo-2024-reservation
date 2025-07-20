@@ -80,19 +80,6 @@ class CartController extends Controller
     }
 
     /**
-     * Clear the cart.
-     *
-     * @param Cart $cart
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function clear(Request $request)
-    {
-        ($request->user()?->cart ?: CartFactory::make())->items()->delete();
-
-        return redirect()->back();
-    }
-
-    /**
      * Handle item quantity increase or decrease.
      *
      * @param Request $request
@@ -130,6 +117,12 @@ class CartController extends Controller
         return redirect()->back();
     }
 
+    /**
+     * Checkout the cart and create an order.
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function checkout(Request $request)
     {
         $cart = $request->user()?->cart ?: CartFactory::make();

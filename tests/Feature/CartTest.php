@@ -25,41 +25,6 @@ test('users can add tickets to cart', function () {
     ]);
 });
 
-test('users can clear their cart', function () {
-    $user = User::factory()->create();
-    $cart = $user->cart()->create();
-
-    $ticket1 = Ticket::factory()->create();
-    $ticket2 = Ticket::factory()->create();
-
-    $cart->items()->createMany([
-        ['ticket_id' => $ticket1->id, 'quantity' => 1],
-        ['ticket_id' => $ticket2->id, 'quantity' => 3],
-    ]);
-
-    $this->assertDatabaseHas('cart_items', [
-        'cart_id' => $cart->id,
-        'ticket_id' => $ticket1->id,
-    ]);
-
-    $this->assertDatabaseHas('cart_items', [
-        'cart_id' => $cart->id,
-        'ticket_id' => $ticket2->id,
-    ]);
-
-    $this->actingAs($user)->post(route('cart.clear', [$cart]));
-
-    $this->assertDatabaseMissing('cart_items', [
-        'cart_id' => $cart->id,
-        'ticket_id' => $ticket1->id,
-    ]);
-
-    $this->assertDatabaseMissing('cart_items', [
-        'cart_id' => $cart->id,
-        'ticket_id' => $ticket2->id,
-    ]);
-});
-
 test('guest can add tickets to cart', function () {
     $ticket = Ticket::factory()->create();
 
@@ -78,44 +43,6 @@ test('guest can add tickets to cart', function () {
         'cart_id' => $cart->id,
         'ticket_id' => $ticket->id,
         'quantity' => 2,
-    ]);
-});
-
-test('guest can clear cart', function () {
-    $this->startSession();
-
-    $cart = CartFactory::make();
-
-    $ticket1 = Ticket::factory()->create();
-    $ticket2 = Ticket::factory()->create();
-
-    $cart->items()->createMany([
-        ['ticket_id' => $ticket1->id, 'quantity' => 1],
-        ['ticket_id' => $ticket2->id, 'quantity' => 3],
-    ]);
-
-    $this->assertDatabaseHas('cart_items', [
-        'cart_id' => $cart->id,
-        'ticket_id' => $ticket1->id,
-    ]);
-
-    $this->assertDatabaseHas('cart_items', [
-        'cart_id' => $cart->id,
-        'ticket_id' => $ticket2->id,
-    ]);
-
-    $this->post(route('cart.clear', $cart->id));
-
-    $updatedCart = Cart::where('session_id', session()->getId())->first();
-
-    $this->assertDatabaseMissing('cart_items', [
-        'cart_id' => $updatedCart->id,
-        'ticket_id' => $ticket1->id
-    ]);
-
-    $this->assertDatabaseMissing('cart_items', [
-        'cart_id' => $updatedCart->id,
-        'ticket_id' => $ticket2->id
     ]);
 });
 

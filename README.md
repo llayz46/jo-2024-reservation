@@ -57,3 +57,8 @@ Pour utiliser l’application en local, suivez ces étapes :
 
 3. **Tests**
    - Exécutez les tests : `./vendor/bin/pest` ou `php artisan test`
+
+4. **Compte de test**
+   - Un compte de test avec le rôle admin est préconfiguré depuis le seeder :
+     - Email : `test@test.fr`
+     - Mot de passe : `password`

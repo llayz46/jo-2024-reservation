@@ -1,4 +1,4 @@
-import { Button } from '@/components/ui/button';
+import { Button, buttonVariants } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { MapPin, Trophy, Users, Ticket } from 'lucide-react';
@@ -91,10 +91,14 @@ export default function Welcome({ tickets }: { tickets: TicketType[] }) {
                                                 <li key={idx}>• {feature}</li>
                                             ))}
                                         </ul>
-                                        <Button className="w-full">
+                                        <Link href={route('tickets.show', ticket.slug)} className={cn(buttonVariants(), "w-full")}>
                                             <Ticket className="size-4" />
                                             Réserver maintenant
-                                        </Button>
+                                        </Link>
+                                        {/* <Button className="w-full">
+                                            <Ticket className="size-4" />
+                                            Réserver maintenant
+                                        </Button> */}
                                     </CardContent>
                                 </Card>
                             ))}

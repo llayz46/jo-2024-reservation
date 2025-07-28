@@ -1,4 +1,4 @@
-import { useForm } from '@inertiajs/react';
+import { useForm, router } from '@inertiajs/react';
 import { FormEventHandler, useRef } from 'react';
 
 import InputError from '@/components/input-error';
@@ -21,7 +21,10 @@ export default function DeleteUser() {
             preserveScroll: true,
             onSuccess: () => closeModal(),
             onError: () => passwordInput.current?.focus(),
-            onFinish: () => reset(),
+            onFinish: () => {
+                reset()
+                router.flushAll();  
+            },
         });
     };
 

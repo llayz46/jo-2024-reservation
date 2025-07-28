@@ -95,10 +95,6 @@ export default function Welcome({ tickets }: { tickets: TicketType[] }) {
                                             <Ticket className="size-4" />
                                             Réserver maintenant
                                         </Link>
-                                        {/* <Button className="w-full">
-                                            <Ticket className="size-4" />
-                                            Réserver maintenant
-                                        </Button> */}
                                     </CardContent>
                                 </Card>
                             ))}

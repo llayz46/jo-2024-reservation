@@ -4,7 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Ticket;
 use App\Models\User;
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -15,9 +15,10 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@test.fr',
+            'name' => 'Admin User',
+            'email' => 'admin@user.fr',
             'is_admin' => true,
+            'password' => Hash::make('$x^#u!Bg4JTVwtNskNeB'),
         ]);
 
         Ticket::factory()->create([

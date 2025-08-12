@@ -60,5 +60,5 @@ Pour utiliser l’application en local, suivez ces étapes :
 
 4. **Compte de test**
    - Un compte de test avec le rôle admin est préconfiguré depuis le seeder :
-     - Email : `test@test.fr`
-     - Mot de passe : `password`
+     - Email : `admin@user.fr`
+     - Mot de passe : `$x^#u!Bg4JTVwtNskNeB`
